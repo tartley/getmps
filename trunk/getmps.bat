@@ -1,3 +1,3 @@
 @echo off
-getmps-0.1-bin-mswin\getmps.exe %*
+python "%~dp0\getmps.py" %*
 
