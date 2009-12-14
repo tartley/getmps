@@ -1,4 +1,5 @@
 
+import codecs
 import json
 import sys
 
@@ -28,8 +29,8 @@ class Member(object):
     def __init__(self, id, postcode):
         self.id = id
         self.postcode = postcode
-        self.mp = None
-        self.constituency = None
+        self.mp = ''
+        self.constituency = ''
 
     def __str__(self):
         return '%s, %s, %s, %s' % (
@@ -44,18 +45,41 @@ def gen_postcodes():
             yield Member(memberid, postcode)
 
 
+def populate_member(member):
+    postcode_valid = (
+        member.postcode != '"postcode"' and
+        member.postcode != '' and
+        member.postcode != '""')
+    if postcode_valid:
+        mp_info_js = twfy.api.getMP(postcode=member.postcode, output='js')
+        mp_info_js = mp_info_js.replace(b'\xf4', 'o')
+        mp_info = json.loads(mp_info_js)
+        member.mp = mp_info.get('full_name', '')
+        member.constituency = mp_info.get('constituency', '').replace(',', ';')
+
+
 def gen_mps(members):
     for member in members:
-        mp_info_js = twfy.api.getMP(postcode=member.postcode, output='js')
-        mp_info = json.loads(mp_info_js)
-        member.mp = mp_info['full_name']
-        member.constituency = mp_info['constituency'].replace(',', ';')
+        try:
+            populate_member(member)
+        except StandardError, e:
+            sys.stderr.write('\n' + str(e) + '\n')
+        yield member
+
+
+def display_progress(members):
+    count = 0
+    for count, member in enumerate(members):
+        sys.stderr.write('.')
+        if count % 50 == 0 and count > 0:
+            sys.stderr.write('%d\n' % (count,))
         yield member
 
 
 def pretty_print(members):
     for member in members:
         print member
+
 
 
 def main():
@@ -65,9 +89,12 @@ def main():
 
     members = gen_postcodes()
     members = gen_mps(members)
+    members = display_progress(members)
     pretty_print(members)
+    sys.stderr.write('done\n')
 
 
 if __name__ == '__main__':
     main()
 
+  
