@@ -51,18 +51,8 @@ py2exe_options = dict(
 
 config = dict(
     # pypi
-    name=NAME,
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description='', #get_long_description(),
-    url='', #http://code.google.com/p/pychoose/',
     author='Jonathan Hartley',
     author_email='tartley@tartley.com',
-    provides=[NAME],
-    packages=[],
-    py_modules=[],
-    scripts=['getmps.py'],
-    # install_requires=['mock'], # setuptools only
     classifiers = [
         "Development Status :: 2 - Pre-Alpha",
         "Environment :: Console",
@@ -73,6 +63,17 @@ config = dict(
         "Programming Language :: Python :: 2.6",
         "Topic :: Other/Nonlisted Topic",
     ],
+    description=DESCRIPTION,
+    license='New BSD License',
+    long_description='', #get_long_description(),
+    name=NAME,
+    packages=['twfy'],
+    provides=[NAME],
+    py_modules=[],
+    scripts=['getmps.py'],
+    # install_requires=['mock'], # setuptools only
+    url='http://code.google.com/p/%s' % (NAME,),
+    version=VERSION,
 
     # py2exe
     console=['getmps.py'],
@@ -82,14 +83,12 @@ config = dict(
 )
 
 
-def main(config):
+def main():
     if not ('--verbose' in sys.argv or '-v' in sys.argv):
         sys.argv.append('--quiet')
-    if not 'py2exe' in sys.argv:
-        sys.argv.append('py2exe')
     setup(**config)
 
 
 if __name__ == '__main__':
-    main(config)
+    main()
 
