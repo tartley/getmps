@@ -6,7 +6,7 @@ import sys
 from twfy import TWFY
 
 
-VERSION = '0.1'
+VERSION = '0.1.2'
 API_KEY = 'AQKQirGqLeMgFYEp3QDXjzte'
 
 USAGE = '''
