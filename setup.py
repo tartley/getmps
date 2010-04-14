@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-import py2exe
 import sys
 
 from getmps import VERSION
@@ -10,7 +9,7 @@ NAME = 'getmps'
 WIN_BINARY = '%s-%s-bin-mswin' % (NAME, VERSION,)
 DIST_DIR = 'dist\\%s' % (WIN_BINARY)
 DESCRIPTION = '''\
-A Windows command-line tool to look up UK Members of Parliament by postcode
+A command-line tool to look up UK Members of Parliament by postcode.
 '''
 
 py2exe_options = dict(
@@ -61,6 +60,7 @@ config = dict(
         "Operating System :: Microsoft :: Windows",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.5",
         "Topic :: Other/Nonlisted Topic",
     ],
     description=DESCRIPTION,
